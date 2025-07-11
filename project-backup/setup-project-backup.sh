@@ -179,6 +179,9 @@ show_help() {
     echo "  logs                - Show recent logs"
     echo "  reports             - Show recent backup reports"
     echo "  config              - Show current configuration"
+    echo "  security            - Run security scan"
+    echo "  encrypt             - Run encrypted backup"
+    echo "  security-status     - Show security scan status"
     echo "  help                - Show this help message"
     echo ""
     echo "The service will:"
@@ -189,12 +192,16 @@ show_help() {
     echo "  - Push changes to remote repositories"
     echo "  - Clean up old backup branches"
     echo "  - Generate detailed status reports"
+    echo "  - Run security scans (if enabled)"
+    echo "  - Create encrypted backups (if enabled)"
     echo ""
     echo "Configuration:"
     echo "  - Auto-commit branches: main, master, develop, dev"
     echo "  - Maximum backup branches per repo: 10"
     echo "  - Inactive threshold: 30 days"
     echo "  - Backup frequency: Every hour"
+    echo "  - Security scanning: Enabled by default"
+    echo "  - Encrypted backup: Disabled by default"
 }
 
 # Function to show logs
@@ -346,6 +353,57 @@ case "${1:-help}" in
         ;;
     configure)
         configure_frequency
+        ;;
+    security)
+        print_status "Running security scan..."
+        if [ -x "$SCRIPT_DIR/security-scanner.sh" ]; then
+            "$SCRIPT_DIR/security-scanner.sh"
+        else
+            print_error "Security scanner not found or not executable"
+            exit 1
+        fi
+        ;;
+    encrypt)
+        print_status "Running encrypted backup..."
+        if [ -x "$SCRIPT_DIR/encrypted-backup.sh" ]; then
+            "$SCRIPT_DIR/encrypted-backup.sh"
+        else
+            print_error "Encrypted backup script not found or not executable"
+            exit 1
+        fi
+        ;;
+    security-status)
+        echo "Security System Status:"
+        echo "======================="
+        echo
+        
+        # Check security scanner
+        if [ -x "$SCRIPT_DIR/security-scanner.sh" ]; then
+            print_success "Security scanner: Available"
+        else
+            print_warning "Security scanner: Not found or not executable"
+        fi
+        
+        # Check encrypted backup
+        if [ -x "$SCRIPT_DIR/encrypted-backup.sh" ]; then
+            print_success "Encrypted backup: Available"
+        else
+            print_warning "Encrypted backup: Not found or not executable"
+        fi
+        
+        # Show recent security reports
+        if [ -d "$HOME/.local/backup/security" ]; then
+            echo
+            echo "Recent security reports:"
+            ls -lt "$HOME/.local/backup/security"/security-report-*.md 2>/dev/null | head -3
+        fi
+        
+        # Show encrypted backups
+        if [ -d "$HOME/.local/backup/encrypted" ]; then
+            echo
+            echo "Recent encrypted backups:"
+            ls -lt "$HOME/.local/backup/encrypted"/*.tar.gz.enc 2>/dev/null | head -3
+        fi
         ;;
     help|--help|-h)
         show_help
