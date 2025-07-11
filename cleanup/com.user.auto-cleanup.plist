@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.user.auto-cleanup</string>
+    
+    <key>Program</key>
+    <string>/Users/joshthomas/dotfiles/scripts/auto-cleanup.sh</string>
+    
+    <key>StartInterval</key>
+    <integer>28800</integer>
+    
+    <key>RunAtLoad</key>
+    <false/>
+    
+    <key>StandardOutPath</key>
+    <string>/Users/joshthomas/.local/log/auto-cleanup-stdout.log</string>
+    
+    <key>StandardErrorPath</key>
+    <string>/Users/joshthomas/.local/log/auto-cleanup-stderr.log</string>
+    
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>/Users/joshthomas</string>
+    </dict>
+    
+    <key>KeepAlive</key>
+    <false/>
+    
+    <key>UserName</key>
+    <string>joshthomas</string>
+</dict>
+</plist>
