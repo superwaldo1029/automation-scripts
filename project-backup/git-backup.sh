@@ -462,6 +462,26 @@ main() {
     # Generate status report
     generate_project_report
     
+    # Run security scanning if enabled
+    if [[ "${ENABLE_SECURITY_SCAN:-true}" == "true" ]]; then
+        print_status "Running security scan..."
+        if [[ -x "$SCRIPT_DIR/security-scanner.sh" ]]; then
+            "$SCRIPT_DIR/security-scanner.sh" > /dev/null 2>&1 || print_warning "Security scan completed with warnings"
+        else
+            print_debug "Security scanner not found or not executable"
+        fi
+    fi
+    
+    # Run encrypted backup if enabled
+    if [[ "${ENABLE_ENCRYPTED_BACKUP:-false}" == "true" ]]; then
+        print_status "Running encrypted backup..."
+        if [[ -x "$SCRIPT_DIR/encrypted-backup.sh" ]]; then
+            "$SCRIPT_DIR/encrypted-backup.sh" > /dev/null 2>&1 || print_warning "Encrypted backup completed with warnings"
+        else
+            print_debug "Encrypted backup script not found or not executable"
+        fi
+    fi
+    
     print_success "Project backup automation completed!"
     send_notification "Project Backup" "Backup completed for ${#repos[@]} repositories"
     
