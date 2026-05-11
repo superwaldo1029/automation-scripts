@@ -11,6 +11,7 @@ source "$SCRIPT_DIR/../utils/common.sh"
 PROJECTS_DIR="$HOME/GitHub"
 BACKUP_DIR="$HOME/.local/backup/projects"
 DOTFILES_DIR="$HOME/dotfiles"
+CONFIG_DIR="$HOME/.config"
 AUTO_COMMIT_BRANCHES=("main" "master" "develop" "dev")
 MAX_BRANCHES_TO_KEEP=10
 INACTIVE_DAYS=30
@@ -22,7 +23,7 @@ log_message "INFO" "Starting project backup and git automation..."
 
 # Function to find all git repositories
 find_git_repos() {
-    local search_dirs=("$PROJECTS_DIR" "$DOTFILES_DIR")
+    local search_dirs=("$PROJECTS_DIR" "$DOTFILES_DIR" "$CONFIG_DIR")
     local repos=()
     
     for dir in "${search_dirs[@]}"; do
